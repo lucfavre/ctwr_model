@@ -64,9 +64,10 @@ def solve_ctwr(h_cold, h_pack, h_hot, S_pack, P_0, T_h_i, T_w_i, mpt_d_i, mpt_w_
     n = n_evap
 
     # Numerical parameters
-    dz = 5e-3 # Cell size
-    N2 = int((H+h1+h2)/dz # Number of vertical cells
-    #dz = (H+h1+h2)/N2 # Cell size
+    #dz = 5e-3 # Cell size
+    #N2 = int((H+h1+h2)/dz) # Number of vertical cells
+    N2 = 3000
+    dz = (H+h1+h2)/N2 # Cell size
 
     # Physical constants and properties
     cp_d = 1005 #Dry air heat capacity
