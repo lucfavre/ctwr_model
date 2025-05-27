@@ -51,7 +51,7 @@ def avg_rey(d_drop, u_h, H):
     return np.average(Relist)
 
 #1D solving of the air/water exchange equations for cooling towers
-def solve_ctwr(h_cold, h_pack, h_hot, S_pack, P_0, T_h_i, T_w_i, mpt_d_i, mpt_w_i, x_rel_i, lamb_evap=0.5, n_evap=0.5):
+def solve_ctwr(h_cold, h_pack, h_hot, S_pack, P_0, T_h_i, T_w_i, mpt_d_i, mpt_w_i, x_rel_i, lamb_evap=0.5, n_evap=0.5, n_cells=3000):
 
     # Geometrical parameters
     H = h_pack # Packing height
@@ -66,7 +66,7 @@ def solve_ctwr(h_cold, h_pack, h_hot, S_pack, P_0, T_h_i, T_w_i, mpt_d_i, mpt_w_
     # Numerical parameters
     #dz = 5e-3 # Cell size
     #N2 = int((H+h1+h2)/dz) # Number of vertical cells
-    N2 = 3000
+    N2 = n_cells
     dz = (H+h1+h2)/N2 # Cell size
 
     # Physical constants and properties
@@ -128,15 +128,9 @@ def solve_ctwr(h_cold, h_pack, h_hot, S_pack, P_0, T_h_i, T_w_i, mpt_d_i, mpt_w_
 
     #Droplet Reynolds number : cold rain zone
     Dg_cold = 5.0e-3
-    #def reynolds(re):
-    #    return re**2 - (rho_w*rho_h*g*(Dg_cold**3)*re)/(18*mu_h**2*(1+0.15*re**0.687))
-    #Re_cold = dicho(reynolds,1e2,1e4,1e-1)
     Re_cold = avg_rey(Dg_cold, -1.0 * u_h, h1)
 
     Dg_hot = 3.0e-3
-    #def reynolds(re):
-    #    return re**2 - (rho_w*rho_h*g*(Dg_hot**3)*re)/(18*mu_h**2*(1+0.15*re**0.687))
-    #Re_hot = dicho(reynolds,1e2,1e4,1e-1)
     Re_hot = avg_rey(Dg_hot, -1.0 * u_h, h2)
 
     def beta_ai(altiz,x,T_h,T_w):
