@@ -125,7 +125,6 @@ def solve_ctwr(h_cold, h_pack, h_hot, S_pack, P_0, T_h_i, T_w_i, mpt_d_i, mpt_w_
         return resu
 
 
-
     #Droplet Reynolds number : cold rain zone
     Dg_cold = 5.0e-3
     Re_cold = avg_rey(Dg_cold, -1.0 * u_h, h1)
@@ -197,13 +196,21 @@ def solve_ctwr(h_cold, h_pack, h_hot, S_pack, P_0, T_h_i, T_w_i, mpt_d_i, mpt_w_
             T_h.append(T_hz)
             x.append(xz)
             x_sat_list.append(x_sat(T_hz))
-        return [T_w,T_h,x,T_w[N2-1],alti, x_sat_list]
+
+        res = {'T_w':np.array(T_w), 'T_h':np.array(T_h), 'Tw_in':T_w[-1],
+               'z':np.array(alti), 'x':np.array(x), 'x_sat':np.array(x_sat_list)}
+        return res
 
 
     def comp_asc_final(T_w_z0):
-        return (euler_asc_final(T_w_z0)[3] - T_w_i)
+        Tw_in = euler_asc_final(T_w_z0)['Tw_in']
+        return (Tw_in - T_w_i)
 
     ### Dichotomie
-    a = 5 + 273.15
-    b = 40 + 273.15
-    return euler_asc_final(dicho(comp_asc_final,a,b,1e-1))
+    a = 1 + 273.15
+    b = 50 + 273.15
+
+    Tw_out = dicho(comp_asc_final, a, b, 0.1)
+    res_final = euler_asc_final(Tw_out)
+
+    return res_final
